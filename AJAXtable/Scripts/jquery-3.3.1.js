@@ -9598,6 +9598,8 @@ jQuery.ajaxTransport( function( options ) {
 
 					// Do send the request (this may raise an exception)
 					xhr.send( options.hasContent && options.data || null );
+
+                    //xhr.send((s.hasContent && s.data) || null);
 				} catch ( e ) {
 
 					// #14683: Only rethrow if this hasn't been notified as an error yet

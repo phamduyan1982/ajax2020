@@ -24,8 +24,69 @@ var homeController = {
         });
         $('#btnSave').off('click').on('click', function () {
             homeController.saveData();
-
         });
+
+        $('.btn-edit').off('click').on('click', function () {
+            var id = $(this).data(id);
+            $('#modalAddUpdate').modal('show');            
+            homeController.loadDetail(id);
+        });
+        $('.btn-delete').off('click').on('click', function () {
+            var id = $(this).data('id');
+            bootbox.confirm("Are you sure delete this employee!", function (result) {                
+                homeController.deleteEmployee(id);
+            });
+        });
+    },
+    deleteEmployee: function (id) {
+        $.ajax({
+            url: '/Home/Delete',
+            data: {
+                id: id
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status == true) {
+                    bootbox.alert("Delete Successfly nhe...", function () {                       
+                        homeController.loadData();
+                    });
+                }
+                else {
+                    alert(response.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+    },
+    loadDetail: function (id) {
+        $.ajax({
+            url: '/Home/GetDetail',
+            data: {
+                id: id
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status == true) {
+                    var data = response.data;
+                    $('#hidID').val(data.ID);
+                    $('#txtName').val(data.Name);
+                    $('#txtSalary').val(data.Salary);
+                    $('#ckStatus').prop('checked', data.Status);
+                }
+                else {
+                    alert(response.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
     },
     saveData: function () {
         var name = $('#txtName').val();
@@ -46,19 +107,21 @@ var homeController = {
             type: 'POST',
             dataType: 'json',
             success: function (response) {
-                if (status == true) {
-                    alert('Save Success');
-                    $('#modalAddUpdate').modal('hide');
-                    homeController.loadData();
+                if (response.status == true) {
+
+                    bootbox.alert("Save Successfly nhe...", function () {
+                        $('#modalAddUpdate').modal('hide');
+                        homeController.loadData();
+                    });
                 }
                 else {
-                    alert(response.Message);
+                    alert(response.message);
                 }
             },
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
     },
     resetForm: function () {
         $('#hidID').val(0);
