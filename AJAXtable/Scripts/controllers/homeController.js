@@ -9,21 +9,68 @@ var homeController = {
         homeController.registerEvent();
     },
     registerEvent: function () {
+        $('#frmSaveData').validate({
+            rules: {
+                txtName: {
+                    required: true,
+                    minlength: 5
+                },
+                txtSalary: {
+                    required: true,
+                    number: true,
+                    min:0
+                }
+            
+            },
+            messages: {
+                txtName: {
+                    required: "Bạn phải nhập tên",
+                    minlength:"Tên phải lớn hơn 5 ký tự"
+                },
+                txtSalary: {
+                    required: "Bạn phải nhập lương",
+                    number: "Lương phải là số",
+                    min:"Lương của bạn phải lớn hơn hoặc bằng không ạ."
+                }
+            }
+
+        });
+
         $('.txtSalary').off('keypress').on('keypress', function (e) {
             if (e.which == 13) {
                 var id = $(this).data('id');
                 var value = $(this).val();
-
                 homeController.updateSalary(id, value);
 
             }
         });
+
+        $('#txtNameS').off('keypress').on('keypress', function (e) {
+            if (e.which == 13) {
+                homeController.loadData(true);
+            }
+        });
+
+
         $('#btnAddNew').off('click').on('click', function () {
             $('#modalAddUpdate').modal('show');
             homeController.resetForm();
         });
         $('#btnSave').off('click').on('click', function () {
-            homeController.saveData();
+            if ($('#frmSaveData').valid()) {
+                homeController.saveData();
+            }
+            
+        });
+
+        $('#btnSearch').off('click').on('click', function () {
+            homeController.loadData(true);
+        });
+
+        $('#btnReset').off('click').on('click', function () {
+            $('#txtNameS').val('');
+            $('#ddlStatusS').val('');
+            homeController.loadData(true);
         });
 
         $('.btn-edit').off('click').on('click', function () {
@@ -49,7 +96,7 @@ var homeController = {
             success: function (response) {
                 if (response.status == true) {
                     bootbox.alert("Delete Successfly nhe...", function () {                       
-                        homeController.loadData();
+                        homeController.loadData(true);
                     });
                 }
                 else {
@@ -111,7 +158,7 @@ var homeController = {
 
                     bootbox.alert("Save Successfly nhe...", function () {
                         $('#modalAddUpdate').modal('hide');
-                        homeController.loadData();
+                        homeController.loadData(true);
                     });
                 }
                 else {
@@ -151,11 +198,15 @@ var homeController = {
             }
         })
     },
-    loadData: function () {
+    loadData: function (changePageSize) {
+        var name = $('#txtNameS').val();
+        var status = $('#ddlStatusS').val();
         $.ajax({
             url:'/Home/LoadData',
             type: 'GET',
             data: {
+                name: name,
+                status: status,
                 page: homeconfig.pageIndex,
                 pageSize: homeconfig.pageSize
             },
@@ -177,15 +228,22 @@ var homeController = {
                     $('#tblData').html(html);
                     homeController.paging(response.total, function () {
                         homeController.loadData();
-                    });
+                    }, changePageSize);
                     homeController.registerEvent();
                 }
             }
 
         })
     },
-    paging: function (totalRow, callback) {
+    paging: function (totalRow, callback, changePageSize) {
         var totalPage = Math.ceil(totalRow / homeconfig.pageSize);
+
+        if ($('#pagination').length === 0 || changePageSize === true) {
+            $('#pagination').empty();
+            $('#pagination').removeData("twbs-pagination");
+            $('#pagination').unbind("page");
+        }
+
         $('#pagination').twbsPagination({
             totalPages: totalPage,
             first: "Đầu",
