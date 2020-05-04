@@ -46,7 +46,7 @@ namespace AJAXtable.Controllers
             }, JsonRequestBehavior.AllowGet);
 
         }
-        // khong bi loi gi
+        // khong bi loi gi....
         [HttpGet]
         public JsonResult GetDetail(int id)
         {
