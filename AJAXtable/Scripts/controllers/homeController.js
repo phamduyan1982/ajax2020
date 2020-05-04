@@ -74,8 +74,8 @@ var homeController = {
         });
 
         $('.btn-edit').off('click').on('click', function () {
-            var id = $(this).data(id);
-            $('#modalAddUpdate').modal('show');            
+             $('#modalAddUpdate').modal('show');  
+            var id = $(this).data('id');                     
             homeController.loadDetail(id);
         });
         $('.btn-delete').off('click').on('click', function () {
