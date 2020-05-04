@@ -47,6 +47,11 @@ namespace AJAXtable.Controllers
 
         }
         // khong bi loi gi....
+        /// <summary>
+        /// nbnbn
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult GetDetail(int id)
         {
