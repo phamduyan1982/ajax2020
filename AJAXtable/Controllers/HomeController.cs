@@ -48,7 +48,7 @@ namespace AJAXtable.Controllers
         }
         // khong bi loi gi....
         /// <summary>
-        /// nbnbn
+        /// abc
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
