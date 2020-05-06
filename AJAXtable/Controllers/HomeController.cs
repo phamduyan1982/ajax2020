@@ -49,6 +49,7 @@ namespace AJAXtable.Controllers
         //
         /// <summary>
         /// thu update
+        /// them phat nua nhe
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
