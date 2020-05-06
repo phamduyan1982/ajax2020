@@ -47,6 +47,11 @@ namespace AJAXtable.Controllers
 
         }
         //
+        /// <summary>
+        /// thu update
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult GetDetail(int id)
         {
